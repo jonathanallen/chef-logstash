@@ -70,6 +70,14 @@ action :create do
 
   case @install_type
   when 'tarball'
+    bdr = directory @base_directory do
+      action :create
+      mode '0755'
+      owner ls[:user]
+      group ls[:group]
+    end
+    new_resource.updated_by_last_action(bdr.updated_by_last_action?)
+
     @run_context.include_recipe 'ark::default'
     arkit = ark ls[:name] do
       url       ls[:source_url]
